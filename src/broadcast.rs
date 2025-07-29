@@ -1,7 +1,7 @@
 use crate::get_receiver;
 use embassy_net::{
-    IpEndpoint, Runner, Stack, StackResources,
     udp::{PacketMetadata, UdpSocket},
+    IpEndpoint, Runner, Stack, StackResources,
 };
 use embassy_time::{Duration, Timer};
 use esp_hal::{
@@ -9,8 +9,8 @@ use esp_hal::{
     timer::timg::TimerGroup,
 };
 use esp_wifi::{
-    EspWifiController,
     wifi::{ClientConfiguration, Configuration, WifiController, WifiDevice, WifiEvent, WifiState},
+    EspWifiController,
 };
 use rtt_target::rprintln;
 
@@ -45,7 +45,7 @@ pub fn config_wifi(
         esp_wifi::init(timer1.timer0, rng).expect("Failed to initialize WIFI/BLE controller")
     );
     let (mut wifi_controller, interfaces) =
-        esp_wifi::wifi::new(&wifi_init, wifi).expect("Failed to initialize WIFI controller");
+        esp_wifi::wifi::new(wifi_init, wifi).expect("Failed to initialize WIFI controller");
 
     wifi_controller
         .set_power_saving(esp_wifi::config::PowerSaveMode::None)
@@ -158,13 +158,9 @@ pub async fn connection(mut controller: WifiController<'static>) {
     rprintln!("Device capabilities: {:?}", controller.capabilities());
 
     loop {
-        match esp_wifi::wifi::wifi_state() {
-            WifiState::StaConnected => {
-                // wait until we're no longer connected
-                controller.wait_for_event(WifiEvent::StaDisconnected).await;
-                Timer::after(Duration::from_millis(5000)).await
-            }
-            _ => {}
+        if esp_wifi::wifi::wifi_state() == WifiState::StaConnected {
+            controller.wait_for_event(WifiEvent::StaDisconnected).await;
+            Timer::after(Duration::from_millis(5000)).await;
         }
         if !matches!(controller.is_started(), Ok(true)) {
             let client_config = Configuration::Client(ClientConfiguration {

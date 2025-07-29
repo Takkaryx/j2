@@ -17,10 +17,10 @@ use embassy_sync::blocking_mutex::raw::NoopRawMutex;
 use embassy_sync::mutex::Mutex;
 
 use esp_hal::{
-    Async,
     clock::CpuClock,
     spi::master::{Config as SpiConfig, Spi},
     timer::systimer::SystemTimer,
+    Async,
 };
 
 use rtt_target::rprintln;
@@ -74,7 +74,7 @@ async fn main(spawner: Spawner) {
     spawner.spawn(net_task(runner)).ok();
     spawner.spawn(udp_broadcast(stack)).ok();
 
-    let _ = spawner.must_spawn(sense_task(
+    spawner.must_spawn(sense_task(
         peripherals.I2C0,
         peripherals.GPIO6,
         peripherals.GPIO7,
