@@ -35,6 +35,12 @@ jobs:
           target: riscv32imc-unknown-none-elf
           toolchain: stable
           components: rust-src, rustfmt, clippy
+      - name: Install Rust for Xtensa
+        if: matrix.target != 'riscv32imc-esp-espidf'
+        uses: esp-rs/xtensa-toolchain@v1.6
+        with:
+          default: true
+          ldproxy: true
       - name: Enable caching
         uses: Swatinem/rust-cache@v2
       - name: Run command
