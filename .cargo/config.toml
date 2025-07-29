@@ -2,6 +2,8 @@
 runner = "probe-rs run --chip=esp32s3 --preverify --always-print-stacktrace --no-location --catch-hardfault"
 
 [env]
+SSID = "SSID"
+PASSWORD = "PASSWORD"
 
 [build]
 rustflags = [

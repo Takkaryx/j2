@@ -16,11 +16,11 @@ use embassy_executor::Spawner;
 use embassy_sync::blocking_mutex::raw::NoopRawMutex;
 use embassy_sync::mutex::Mutex;
 
-use esp_hal::clock::CpuClock;
-use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::{
     Async,
+    clock::CpuClock,
     spi::master::{Config as SpiConfig, Spi},
+    timer::systimer::SystemTimer,
 };
 
 use rtt_target::rprintln;

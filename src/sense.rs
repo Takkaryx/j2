@@ -1,7 +1,9 @@
 use embassy_sync::watch::DynReceiver;
 use embassy_time::{Delay, Duration, Timer};
-use esp_hal::i2c::master::{Config as I2cConfig, I2c};
-use esp_hal::peripherals::{GPIO6, GPIO7, I2C0};
+use esp_hal::{
+    i2c::master::{Config as I2cConfig, I2c},
+    peripherals::{GPIO6, GPIO7, I2C0},
+};
 use libscd::asynchronous::scd4x::Scd4x;
 use rtt_target::rprintln;
 use serde::Serialize;

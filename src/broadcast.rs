@@ -1,18 +1,19 @@
 use crate::get_receiver;
-use embassy_net::IpEndpoint;
-use embassy_net::Runner;
-use embassy_net::Stack;
-use embassy_net::StackResources;
-use embassy_net::udp::PacketMetadata;
-use embassy_net::udp::UdpSocket;
+use embassy_net::{
+    IpEndpoint, Runner, Stack, StackResources,
+    udp::{PacketMetadata, UdpSocket},
+};
 use embassy_time::{Duration, Timer};
-use esp_hal::peripherals::{RNG, TIMG0, WIFI};
-use esp_hal::timer::timg::TimerGroup;
-use esp_wifi::EspWifiController;
-use esp_wifi::wifi::ClientConfiguration;
-use esp_wifi::wifi::Configuration;
-use esp_wifi::wifi::{WifiController, WifiDevice, WifiEvent, WifiState};
+use esp_hal::{
+    peripherals::{RNG, TIMG0, WIFI},
+    timer::timg::TimerGroup,
+};
+use esp_wifi::{
+    EspWifiController,
+    wifi::{ClientConfiguration, Configuration, WifiController, WifiDevice, WifiEvent, WifiState},
+};
 use rtt_target::rprintln;
+
 macro_rules! mk_static {
     ($t:ty,$val:expr) => {{
         static STATIC_CELL: static_cell::StaticCell<$t> = static_cell::StaticCell::new();
