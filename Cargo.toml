@@ -55,6 +55,7 @@ embassy-sync = { version = "0.7.0" }
 libscd = { version = "0.5.1", features = ["async", "defmt", "scd4x"] }
 serde = { version = "1.0.219", default-features = false, features = ["derive"] }
 serde_json = { version = "1.0.141", default-features = false, features = ["alloc"] }
+embedded-graphics-core = { version = "0.4.0", features = ["defmt"] }
 
 
 [profile.dev]

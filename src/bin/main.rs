@@ -8,23 +8,16 @@
 
 use j2::config_wifi;
 use j2::connection;
+use j2::display_config;
 use j2::net_task;
 use j2::sense_task;
 use j2::udp_broadcast;
 
 use embassy_executor::Spawner;
-use embassy_sync::blocking_mutex::raw::NoopRawMutex;
-use embassy_sync::mutex::Mutex;
 
-use esp_hal::{
-    clock::CpuClock,
-    spi::master::{Config as SpiConfig, Spi},
-    timer::systimer::SystemTimer,
-    Async,
-};
+use esp_hal::{clock::CpuClock, timer::systimer::SystemTimer};
 
 use rtt_target::rprintln;
-use static_cell::StaticCell;
 
 #[panic_handler]
 fn panic(_: &core::panic::PanicInfo) -> ! {
@@ -54,19 +47,6 @@ async fn main(spawner: Spawner) {
 
     rprintln!("Embassy initialized!");
 
-    #[allow(dead_code)]
-    static QUAD_SPI: StaticCell<Mutex<NoopRawMutex, Spi<'static, Async>>> = StaticCell::new();
-    #[allow(unused_variables)]
-    let quad_spi = Spi::new(peripherals.SPI2, SpiConfig::default())
-        .expect("Failed to initialize QuadSPI bus")
-        .with_mosi(peripherals.GPIO14)
-        .with_miso(peripherals.GPIO10)
-        .with_sck(peripherals.GPIO15)
-        .with_cs(peripherals.GPIO11)
-        .with_sio2(peripherals.GPIO16)
-        .with_sio3(peripherals.GPIO12)
-        .with_dma(peripherals.DMA_CH0);
-
     let (stack, wifi_controller, runner) =
         config_wifi(peripherals.RNG, peripherals.TIMG0, peripherals.WIFI);
 
@@ -79,4 +59,15 @@ async fn main(spawner: Spawner) {
         peripherals.GPIO6,
         peripherals.GPIO7,
     ));
+
+    let disp = display_config(
+        peripherals.GPIO14,
+        peripherals.GPIO10,
+        peripherals.GPIO15,
+        peripherals.GPIO11,
+        peripherals.GPIO16,
+        peripherals.GPIO12,
+        peripherals.DMA_CH0,
+        peripherals.SPI2,
+    );
 }
